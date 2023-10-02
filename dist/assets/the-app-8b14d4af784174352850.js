@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkvue_app_scaffolding_name=self.webpackChunkvue_app_scaffolding_name||[]).push([[596],{37:(n,a,e)=>{e.r(a),e.d(a,{default:()=>l});var s=e(252);const t=(0,s._)("h1",{class:"title is-1"},"ToDo App",-1),u=(0,s._)("div",{id:"main"},[(0,s._)("button",{class:"button is-primary"}," Button ")],-1),i={},l=(0,e(744).Z)(i,[["render",function(n,a){return(0,s.wg)(),(0,s.iD)(s.HY,null,[t,u],64)}]])}}]);
+//# sourceMappingURL=the-app-8b14d4af784174352850.js.map

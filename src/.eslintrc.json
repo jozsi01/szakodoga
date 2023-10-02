@@ -1,0 +1,17 @@
+{
+	"env": {
+		"browser": true
+	},
+	"globals": {
+		"process": true
+	},
+	"overrides": [
+		{
+			"files": ["*.spec.{ts,js}"],
+			"env": {
+				"jest": true,
+				"node": true
+			}
+		}
+	]
+}

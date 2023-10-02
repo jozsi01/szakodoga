@@ -1,0 +1,19 @@
+/** At times Bulma collides with Highlight.js used for code samples */
+.prismjs {
+	color: white;
+}
+
+/** Revert effect of elements/other.sass */
+.prismjs .number {
+  font-size: 1em;
+  display: initial;
+  align-items: initial;
+  background-color: initial;
+  border-radius: initial;
+  justify-content: initial;
+  margin-right: initial;
+  min-width: initial;
+  padding: initial;
+  text-align: initial;
+  vertical-align: initial;
+}

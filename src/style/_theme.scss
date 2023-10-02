@@ -1,0 +1,42 @@
+// Allow users to control root font size via their browser
+$body-size: initial;
+/* scaffolding-disable unless keepExamples */
+
+// Import initial variables and helper functions first
+@import 'bulma/sass/utilities/initial-variables';
+@import 'bulma/sass/utilities/functions';
+
+// Change any variable you find on Bulma's site
+// Don't forget to use and accessible color palette, where contrast is concerned
+$blue: #06557A;
+$black-ter: #252525;
+$green: #2D6312;
+$grey-dark: #505050;
+$white-bis: #fdfdfd;
+$white-ter: #f8f8f8;
+$red: #B30600;
+
+$size-medium: $size-4;
+$size-large: $size-2;
+
+$primary: $blue;
+$info: $green;
+$warning: $orange;
+
+// Bulma chose to hard-wire the <HTML> element (AKA "root") font-size to 16px (it's default value).
+// This is a no-no from accessibility point of view, robbing users from the ability to change their
+// browser font-size in order to consistently control their browsing experience.
+// The very purpose of using rem values is that we want to derive sizing from this dynamic value.
+// Therefore we simply reset Bulma's root font-size back to whatever the browser setting is.
+$body-size: initial;
+
+// Let it derive the remaining variables and apply the rules
+@import 'bulma/sass/utilities/derived-variables';
+
+// Theme any bulma module or extension
+/** BOX */
+$box-background-color: $white-ter;
+
+/** FOOTER */
+$footer-background-color: none;
+/* scaffolding-enable */

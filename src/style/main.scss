@@ -1,0 +1,12 @@
+// An underscore signifies that the file is a "partial".
+// It's meant to be used by other stylesheets.
+//
+// Additionally this specific partial is ONLY ALLOWED to contain
+// code that gets inlined during transpilation (constants, functions, mixins).
+// This limitation
+// allows it to be imported in <style scoped> blocks of Vue files
+// without bloating up the bundle with redundant hashed selectors.
+//@import '_theme';
+
+@import '~bulma/bulma';
+@import '~bulma-extensions/bulma-switch/src/sass/index.sass';
