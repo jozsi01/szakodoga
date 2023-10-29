@@ -1,7 +1,7 @@
 import { convert } from 'src/components/ColorNameToHex';
 import Konva from 'konva';
 import { useGamePlayStore } from 'src/store/gameplayStore';
-
+import { faChessPawn } from '@fortawesome/free-solid-svg-icons';
 
 function drawPieces(currentPlayer) {
     const gamePlayStore = useGamePlayStore();
@@ -18,30 +18,34 @@ function drawPieces(currentPlayer) {
     })
     var layer = new Konva.Layer();
     let xOffset = 20;
-    
-    for (let i = 0; i < numberOfPieces; i++) {
-
-        var circle = new Konva.Circle({
+    let i = 0;
+    currentPlayer.pieces.forEach(piece => {
+        var pieceIcon = new Konva.Path({
             x: xOffset,
-            y: stage.height() / 2,
-            radius: 20,
+            y: 0,
+            data: faChessPawn.icon[4],
             fill: convert(currentPlayer.color),
-            
-            stroke: 'black',
-            strokeWidth: 1
-        })
+            scaleX: 0.07,
+            scaleY: 0.07,
+            id: piece.id
+          });
         if (i === numberOfPieces - 1) {
-            circle.on('mousedown', function () {
+            pieceIcon.on('mousedown', function () {
                 gamePlayStore.selectedPiece = currentPlayer.pieces.find(p=>p.positionOnTheBoard === -1 && !p.gotAround);
                 console.log(gamePlayStore.selectedPiece);
+                pieceIcon.stroke('black');
+                pieceIcon.strokeWidth(10);
             })
         }
-
+        i++;
         xOffset += 20;
-        layer.add(circle);
-    }
+        layer.add(pieceIcon);
+    });
     stage.add(layer)
     layer.draw();
 
 }
+
+
+
 export {drawPieces};

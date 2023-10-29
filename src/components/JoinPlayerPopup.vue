@@ -69,6 +69,7 @@ const props = defineProps(["boardId"]);
 .popupInner {
     background: #FFF;
     padding: 32px;
+    border-radius: 10px;
 }
 
 form {

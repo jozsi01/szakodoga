@@ -67,20 +67,14 @@ const isJoinPlayerButtonDisabled = computed(()=> {
         <JoinPlayerPopup :boardId="props.board.id" @joinPlayerPopUpOpen="(msg) => joiningPlayer = msg" v-if="joiningPlayer">
         </JoinPlayerPopup>
         <div class="buttons">
-            <button data-test="startButton" v-if="isStartButtonDisabled" @click="navigateToPlayingBoard(board.id)"
-                class="button is-success">Start</button>
-            <button v-else data-test="startButton" class="button is-success" title="Not enough players" disabled="true">
-                Start</button>
-            <button data-test="stopButton" v-if="isStopButtonDisabled" @click="boardStore.stopBoard(board.id)"
-                class="button is-danger">Stop</button>
-            <button data-test="stopButton" v-else disabled="true" title="Game cant be stopped" class="button is-danger">Stop</button>
-            <button data-test="resetButton" v-if="isResetButtonDisabled" @click="boardStore.resetBoard(board.id)"
-                class="button is-warning">Reset</button>
-            <button data-test="resetButton" title="Game cant be reseted" v-else disabled = true
-                class="button is-warning">Reset</button>
-            <button data-test="joinPlayerButton" v-if="isJoinPlayerButtonDisabled" @click="joiningPlayer = true" class="button is-info">Join player</button>
-            <button data-test="joinPlayerButton" v-else disabled="true" title="Board is full" class="button is-info">Join player</button>
-            <button data-test="deleteButton" @click="boardStore.deleteBoard(board.id)" class="button is-danger">Delete
+            <button data-test="startButton" :disabled="!isStartButtonDisabled" @click="navigateToPlayingBoard(board.id)"
+                class="button is-success"><font-awesome-icon class="buttonIcons" :icon="['fas', 'play']"/>Start</button>
+            <button data-test="stopButton" :disabled="!isStopButtonDisabled" @click="boardStore.stopBoard(board.id)"
+                class="button is-danger"><font-awesome-icon class="buttonIcons" :icon="['fas', 'stop']"/>Stop</button>
+            <button data-test="resetButton" :disabled="!isResetButtonDisabled" @click="boardStore.resetBoard(board.id)"
+                class="button is-warning"><font-awesome-icon class="buttonIcons" :icon="['fas', 'rotate-left']" />Reset</button>
+            <button data-test="joinPlayerButton" :disabled="!isJoinPlayerButtonDisabled" @click="joiningPlayer = true" class="button is-info"><font-awesome-icon class="buttonIcons" :icon="['fas', 'right-to-bracket']" />Join player</button>
+            <button data-test="deleteButton" @click="boardStore.deleteBoard(board.id)" class="button is-danger"><font-awesome-icon class="buttonIcons" :icon="['fas', 'trash']" />Delete
                 board</button>
         </div>
     </div>
@@ -97,7 +91,9 @@ const isJoinPlayerButtonDisabled = computed(()=> {
     justify-content: space-between;
 
 }
-
+.buttonIcons{
+    margin-right: 3px;
+}
 strong {
     color: aliceblue;
 }

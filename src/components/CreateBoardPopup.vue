@@ -28,7 +28,7 @@ const inputValidation = computed(() => {
                         <input data-test="nameInput" type="text" placeholder="Board name" v-model="createdBoard.boardName">
                     </div>
                 </div>
-                    
+                
                 <div class="field">
                     <label>Distance between players: </label>
                     <div class="control">
@@ -50,9 +50,9 @@ const inputValidation = computed(() => {
                     </div>
                 </div>  
                    
-                   
-                <button data-test="createButton" v-if="inputValidation" class="button is-success" @click="boardStore.createBoard(createdBoard); emit('popupClose',false)">Create</button>
-                <button data-test="createButton" v-else class="button is-succes" title="Disabled button" disabled>Create</button>
+                  
+                <button data-test="createButton" :disabled="!inputValidation" class="button is-success" @click="boardStore.createBoard(createdBoard); emit('popupClose',false)">Create</button>
+                
                 <button  data-test="cancelButton" @click="emit('popupClose',false)" class="button is-danger">Cancel</button>
                     
                 
@@ -72,7 +72,7 @@ const inputValidation = computed(() => {
     bottom: 0;
     z-index: 99;
     background-color: rgba(0, 0, 0, 0.2);
-
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,6 +80,7 @@ const inputValidation = computed(() => {
 
 .popupInner {
     background: #FFF;
+    border-radius: 10px;
     padding: 32px;
 }
 form{

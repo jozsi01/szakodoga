@@ -2,6 +2,7 @@
 import { router } from "src/vue-setup/router";
 import { robotStep } from "src/robot/robotBehaviour";
 import { gamePlayStoreFactory, boardStoreFactory } from "./storeFactory.js";
+import gameplayStoreApi from "src/store/gameplayStoreApi.js";
 async function handleStatusChange(statusChangeMessage) {
     const boardStore = boardStoreFactory();
     const gamePlayStore = gamePlayStoreFactory();
@@ -58,6 +59,7 @@ async function handlePlayerChange(playerChangeMessage) {
 }
 
 async function handlePositionChange(positionChangeMessage) {
+    console.log(positionChangeMessage)
     const gamePlayStore = gamePlayStoreFactory();
     const boardStore = boardStoreFactory();
     gamePlayStore.playingBoard = await boardStore.getBoard(positionChangeMessage.boardId);

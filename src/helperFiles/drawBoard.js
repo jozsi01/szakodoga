@@ -1,7 +1,7 @@
 import Konva from "konva";
 import { convert } from "src/components/ColorNameToHex";
 import { useGamePlayStore } from "src/store/gameplayStore";
-
+import { faChessPawn } from "@fortawesome/free-solid-svg-icons";
 function setUpBoardWithMorePlayer(board,_containerWidth,_containerHeight) {
     const gamePlayStore = useGamePlayStore();
     const numberOfFields = ((board.distanceBetweenPlayers - 1) * board.players.length) + board.players.length;
@@ -18,6 +18,7 @@ function setUpBoardWithMorePlayer(board,_containerWidth,_containerHeight) {
     var layer = new Konva.Layer();
     let rotationalDegree = degreeOffset;
     let id = 0;
+    
 
     for (let i = 0; i < board.players.length; i++) {
         let angleInRadian = (rotationalDegree * Math.PI) / 180;
@@ -33,14 +34,6 @@ function setUpBoardWithMorePlayer(board,_containerWidth,_containerHeight) {
 
         (function (caputerCircle) {
             caputerCircle.on("mousedown", function () {
-                for (let i = 0; i < gamePlayStore.currentPlayer.pieces.length; i++) {
-                    const id = caputerCircle.id();
-                    const piece = gamePlayStore.currentPlayer.pieces[i].positionOnTheBoard;
-                    if (id == piece) {
-                        
-                        gamePlayStore.selectedPiece = gamePlayStore.currentPlayer.pieces[i];
-                    }
-                }
                 const piece = gamePlayStore.currentPlayer.pieces.find(p => p.positionOnTheBoard == caputerCircle.id());
                 if (piece) gamePlayStore.selectedPiece = piece;
             });
@@ -116,6 +109,9 @@ function setUpBoardWith2Player(board,_containerWidth,_containerHeight) {
     const angleOffset = 360 / numberOfFields;
     let id = 0;
     let a = 0;
+
+
+
     for (let i = 0; i < 360; i = i += angleOffset) {
         const angleInRadian = (i * Math.PI) / 180;
         let color = 'black'
@@ -125,8 +121,6 @@ function setUpBoardWith2Player(board,_containerWidth,_containerHeight) {
             stroke = 4;
             a++;
         }
-
-
         let circle = new Konva.Circle({
             x: stage.width() / 2 + (Math.sin(angleInRadian) * boardGameradius),
             y: stage.height() / 2 + (Math.cos(angleInRadian) * boardGameradius),
@@ -136,15 +130,10 @@ function setUpBoardWith2Player(board,_containerWidth,_containerHeight) {
             stroke: color,
             strokeWidth: stroke
         });
-     
-
         (function (caputerCircle) {
             caputerCircle.on("mousedown", function () {
-                
                 const piece = gamePlayStore.currentPlayer.pieces.find(p => p.positionOnTheBoard == caputerCircle.id());
                 if (piece) gamePlayStore.selectedPiece = piece;
-                console.log(gamePlayStore.selectedPiece);
-
             });
         })(circle);
 

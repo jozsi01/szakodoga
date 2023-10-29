@@ -13,7 +13,7 @@ const playerColorInHex = convert((playerColor));
 
 <template>
     <span>
-        <strong data-test="playerName" :style="{color: playerColorInHex, textShadow: '1px 1px 1px #000, 1px 1px 1px #000, 1px 1px 1px #000, 1px 1px 1px #000'}"> {{ player.name }}</strong>
+        <strong data-test="playerName" :style="{color: playerColorInHex, textShadow: '1px 1px 1px #000, 1px 1px 1px #000, 1px 1px 1px #000, 1px 1px 1px #000'}"><font-awesome-icon :icon="['fas', 'user']" /> {{ player.name }}</strong>
         <button data-test="leavePlayerButton" @click="boardStore.leavePlayer(boardId,{playerId: props.player.id})" class="button is-danger is-small"> Leave</button>
     </span>
     

@@ -12,6 +12,8 @@ import { useGamePlayStore } from 'src/store/gameplayStore';
 import { convert } from './ColorNameToHex';
 import { setUpBoardWithMorePlayer, setUpBoardWith2Player } from 'src/helperFiles/drawBoard.js';
 import { robotStep } from 'src/robot/robotBehaviour';
+import { faChessPawn } from "@fortawesome/free-solid-svg-icons";
+import DropdownComponent from "./DropdownComponent.vue"
 const gamePlayStore = useGamePlayStore();
 const boardStore = useBoardStore();
 
@@ -25,7 +27,6 @@ watch(() => gamePlayStore.playingBoard, (playingBoard) => {
     board = playingBoard;
 })
 let stage;
-let tweens = [];
 
 gamePlayStore.robotEnabled = false;
 
@@ -34,12 +35,38 @@ let playersWihoutCurrentPlayer = computed(() => {
     return board.players.filter(p => p.id !== gamePlayStore.currentPlayer.id);
 })
 
+
+
 watch(() => gamePlayStore.robotEnabled, async (robotEnabled) => {
     if (robotEnabled) {
         await robotStep();
     }
 })
+function findPieceInStage(piece) {
+    const pieces = stage.find("Path")
+    return pieces.find(p => p.attrs.id == piece.id)
+}
+function removeEveryOutline(paths) {
+    paths.forEach(function (path) {
+        path.stroke(null);
+        path.strokeWidth(0)
+    })
+}
+function removePathsFromLayer(layer) {
+    const children = layer.getChildren(); // Get all children of the layer
 
+    // Iterate through the children and remove Konva.Path objects
+    for (let i = children.length - 1; i >= 0; i--) {
+        const child = children[i];
+
+        if (child instanceof Konva.Path) {
+            child.destroy(); // Remove the Konva.Path object
+        }
+    }
+
+    layer.draw(); // Redraw the layer to apply the changes
+}
+const ICON_ARANY = faChessPawn.icon[0] / faChessPawn.icon[1];
 onMounted(async () => {
     await initRollChange(board);
     await initPositionChange(board);
@@ -51,37 +78,44 @@ onMounted(async () => {
     else {
         stage = setUpBoardWithMorePlayer(board, containerWidth, containerHeight);
     }
+    watch(() => gamePlayStore.selectedPiece, (selectedpiece) => {
+        let paths = stage.find("Path");
+        removeEveryOutline(paths);
+        let selectedPiece = findPieceInStage(selectedpiece);
+        if (selectedPiece) {
+            selectedPiece.stroke('black');
+            selectedPiece.strokeWidth(10);
+        }
 
+    })
     watch(() => gamePlayStore.playingBoard, (playingBoard) => {
         if (playingBoard.players) {
-            for (var n = 0; n < tweens.length; n++) {
-                tweens[n].destroy();
-            }
-            let circles = stage.find('Circle')
 
-            circles.forEach(function (shape) {
-                let circleHasPlayer = false;
+            let circles = stage.find('Circle')
+            removePathsFromLayer(stage.children[0])
+            circles.forEach(function (field) {
                 for (let q = 0; q < playingBoard.players.length; q++) {
-                    for (let i = 0; i < playingBoard.players[q].pieces.length; i++) {
-                        if (shape.id() == playingBoard.players[q].pieces[i].positionOnTheBoard) {
-                            circleHasPlayer = true;
-                            tweens.push(new Konva.Tween({
-                                node: shape,
-                                duration: 0.5,
+                    for (let i = playingBoard.players[q].pieces.length - 1; i >= 0; i--) {
+                        if (field.id() == playingBoard.players[q].pieces[i].positionOnTheBoard) {
+
+                            var piece = new Konva.Path({
+                                x: field.x() - field.radius() / 2,
+                                y: field.y() - (field.radius()) + 3,
+                                data: faChessPawn.icon[4],
                                 fill: convert(playingBoard.players[q].color),
-                                easing: Konva.Easings['EaseOut']
-                            }).play());
+                                scaleX: ((field.radius() * 1.5) / faChessPawn.icon[0]) * ICON_ARANY,
+                                scaleY: (field.radius() * 1.5) / faChessPawn.icon[1],
+                                id: playingBoard.players[q].pieces[i].id
+                            });
+                            piece.on('mousedown', function () {
+                                gamePlayStore.selectedPiece = gamePlayStore.currentPlayer.pieces.find(p => p.id == piece.id());
+                            })
+
+                            stage.children[0].add(piece);
                         }
                     }
                 }
-                if (!circleHasPlayer) {
-                    tweens.push(new Konva.Tween({
-                        node: shape,
-                        duration: 0.5,
-                        fill: "white",
-                        easing: Konva.Easings['EaseOut']
-                    }).play());
-                }
+
             });
         }
     })
@@ -97,27 +131,18 @@ function findPlayerById(Id) {
         <ErrorMessage />
 
         <h1>{{ board.boardName }}</h1>
-        <div class="board content">
+        <div class="boardContent">
             <div id="players">
                 <h2>Current player: </h2>
                 <CurrentPlayer :board="board" />
-                <div class="robot">
-
-                    <div class="field">
-                        <input data-test="robotCheckbox" id="robotEnable" type="checkbox" name="robotEnable" class="switch"
-                            v-model="gamePlayStore.robotEnabled">
-                        <label for="robotEnable">Robot</label>
-                    </div>
-
+                <DropdownComponent />
+                <div class="restOfThePlayers">
+                    <h2>Players: </h2>
+                    <PlayerDetail v-for="player in playersWihoutCurrentPlayer" :key="player.id" :player="player" />
                 </div>
-
-                <h2>Players: </h2>
-                <PlayerDetail v-for="player in playersWihoutCurrentPlayer" :key="player.id" :player="player" />
             </div>
-
             <div id="container">
-                <div id="board">
-                </div>
+                <div id="board"> </div>
             </div>
         </div>
     </div>
@@ -131,12 +156,15 @@ function findPlayerById(Id) {
     justify-content: center;
     flex-basis: 80%;
     align-items: center;
-
+    border: 1px solid red;
     height: 100vh;
 }
-
+.boardContent{
+    display: flex;
+}
 .robot {
     display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -158,7 +186,6 @@ h2 {
 #currentPlayer {
     display: flex;
     flex-direction: column;
-    border: 1px solid red;
     flex-basis: 20%;
 }
 

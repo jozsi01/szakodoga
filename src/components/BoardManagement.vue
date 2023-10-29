@@ -7,7 +7,6 @@ import ErrorMessage from './ErrorMessage.vue';
 import { getEventSource } from 'src/helperFiles/EventSourceFactory';
 import { ref } from 'vue';
 
-
 const boardStore = useBoardStore();
 const creatingNewBoard = ref(false);
 
@@ -18,14 +17,13 @@ onMounted(async () => {
 
 
 
-
 </script>
 
 <template>
     <ErrorMessage />
     <div class="content">
         <div>
-            <button data-test="createButton" @click="creatingNewBoard = !creatingNewBoard" class="button is-primary">Create
+            <button data-test="createButton" @click="creatingNewBoard = !creatingNewBoard" class="button is-primary"><font-awesome-icon style="margin-right: 3px;" :icon="['fas', 'plus']" />Create
                 Board</button>
         </div>
         
